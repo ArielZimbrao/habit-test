@@ -11,3 +11,21 @@ export class UserNotFoundError extends HttpException {
     super('User not found', HttpStatus.NOT_FOUND);
   }
 }
+
+export class NoAccessPermissionError extends HttpException {
+  constructor() {
+    super('You do not have permission to make this request', HttpStatus.FORBIDDEN);
+  }
+}
+
+export class ApplicationNotFoundError extends HttpException {
+  constructor() {
+    super('Application not found', HttpStatus.NOT_FOUND);
+  }
+}
+
+export class ApplicationIdIsRequiredError extends HttpException {
+  constructor() {
+    super('Application id is required for user creation', HttpStatus.BAD_REQUEST);
+  }
+}

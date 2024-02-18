@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsInt, Min } from 'class-validator';
 
 export class PaginationDTO {
   @ApiProperty({ description: 'itens per page for filter' })

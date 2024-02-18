@@ -17,7 +17,7 @@ export class Context {
   }
 
   getUser(): {
-    id: number;
+    id: string;
     email: string;
     role: string;
     application_id: string;
@@ -26,7 +26,8 @@ export class Context {
   }
 
   getApplicationId() {
-    return this.getUser().application_id;
+    const userContext = this.getUser();
+    return userContext?.application_id || null;
   }
 }
 

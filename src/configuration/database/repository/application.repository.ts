@@ -12,4 +12,12 @@ export class ApplicationRepository {
   async save(data: ApplicationEntity): Promise<ApplicationEntity> {
     return this.repo.save(data);
   }
+
+  getApplicationByid(id: string): Promise<ApplicationEntity> {
+    return this.repo.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
 }

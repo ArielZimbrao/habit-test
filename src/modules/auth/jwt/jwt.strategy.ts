@@ -17,8 +17,8 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
     return {
       id: payload.id,
       email: payload.email,
-      roleAcroynm: payload.roleAcroynm,
-      clinic_id: payload.clinic_id,
+      role: payload.role,
+      applicationId: payload.applicationId,
     };
   }
 }
