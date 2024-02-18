@@ -72,6 +72,7 @@ export class UserController {
     const user = await this.userService.findOne(id, this.context.getApplicationId());
     return user;
   }
+
   @Delete(':id')
   @ApiOperation({
     summary: 'Delete User Endpoint',

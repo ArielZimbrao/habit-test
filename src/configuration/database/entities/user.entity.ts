@@ -5,12 +5,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { IsBoolean, IsDateString, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ApplicationEntity } from './application.entity';
+import { MessageEntity } from './message.entity';
 
 @Entity({ name: 'user', schema: 'public' })
 export class UserEntity extends BaseEntity {
@@ -83,4 +85,8 @@ export class UserEntity extends BaseEntity {
   })
   @JoinColumn()
   application?: ApplicationEntity | null;
+
+  @OneToMany(() => MessageEntity, (messageEntity) => messageEntity.application)
+  @JoinColumn()
+  messages: MessageEntity[];
 }

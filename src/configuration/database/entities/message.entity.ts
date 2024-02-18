@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,25 +12,25 @@ import {
 import { IsBoolean, IsDateString, IsNotEmpty, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
-import { MessageEntity } from './message.entity';
+import { ApplicationEntity } from './application.entity';
 
-@Entity({ name: 'application', schema: 'public' })
-export class ApplicationEntity extends BaseEntity {
-  @ApiProperty({ description: 'Application ID' })
+@Entity({ name: 'message', schema: 'public' })
+export class MessageEntity extends BaseEntity {
+  @ApiProperty({ description: 'Message ID' })
   @IsNotEmpty()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: 'Application name' })
+  @ApiProperty({ description: 'Text of message' })
   @IsNotEmpty()
   @MaxLength(100)
   @Column('varchar', {
     length: 100,
     nullable: false,
   })
-  name: string;
+  text: string;
 
-  @ApiProperty({ description: 'Application actived' })
+  @ApiProperty({ description: 'Message actived' })
   @IsBoolean()
   @Column('boolean', {
     nullable: false,
@@ -37,21 +38,21 @@ export class ApplicationEntity extends BaseEntity {
   })
   actived: boolean;
 
-  @ApiProperty({ description: 'Application created date' })
+  @ApiProperty({ description: 'Message created date' })
   @IsDateString()
   @CreateDateColumn()
   created_at: Date;
 
-  @ApiProperty({ description: 'Application updated date' })
+  @ApiProperty({ description: 'Message updated date' })
   @IsDateString()
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => UserEntity, (userEntity) => userEntity.application)
+  @ManyToOne(() => UserEntity, (userEntity) => userEntity.messages)
   @JoinColumn()
-  users: UserEntity[];
+  user: UserEntity;
 
-  @OneToMany(() => MessageEntity, (messageEntity) => messageEntity.application)
+  @ManyToOne(() => ApplicationEntity, (applicationEntity) => applicationEntity.messages)
   @JoinColumn()
-  messages: MessageEntity[];
+  application: ApplicationEntity;
 }
