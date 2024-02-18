@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: ./
+      target: development
+    volumes:
+      - ./usr/src/app
+    ports:
+      - 3000:3000
+    command: npm run start:prod
+    env_file:
+      - .env
+    depends_on:
+      - pgsql
+  pgsql:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: habit
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+volumes:
+  pg-data:
