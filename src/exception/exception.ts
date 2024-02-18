@@ -29,3 +29,15 @@ export class ApplicationIdIsRequiredError extends HttpException {
     super('Application id is required for user creation', HttpStatus.BAD_REQUEST);
   }
 }
+
+export class ApplicationAlreadyExistsError extends HttpException {
+  constructor() {
+    super('Application already exists', HttpStatus.BAD_REQUEST);
+  }
+}
+
+export class UserAlreadyExistsError extends HttpException {
+  constructor() {
+    super('User already exists', HttpStatus.BAD_REQUEST);
+  }
+}

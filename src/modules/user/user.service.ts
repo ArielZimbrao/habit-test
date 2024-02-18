@@ -6,7 +6,7 @@ import PageData from 'src/util/pagination.type';
 import { UserRepository } from 'src/configuration/database/repository/user.repository';
 import { UserEntity } from 'src/configuration/database/entities/user.entity';
 import { ApplicationRepository } from 'src/configuration/database/repository/application.repository';
-import { ApplicationNotFoundError } from 'src/exception/exception';
+import { ApplicationNotFoundError, UserAlreadyExistsError } from 'src/exception/exception';
 import { RoleUserEnum } from 'src/util/enum/role.enum';
 
 @Injectable()
@@ -17,6 +17,12 @@ export class UserService {
   ) {}
 
   async create(data: CreateUserDto): Promise<UserEntity> {
+    const olduser = await this.userRepository.findActiveUserEmail(data.email);
+
+    if (olduser) {
+      throw new UserAlreadyExistsError();
+    }
+
     let application = null;
     if (data.role === RoleUserEnum.USER) {
       application = await this.applicationRepository.getApplicationByid(data.applicationId);
