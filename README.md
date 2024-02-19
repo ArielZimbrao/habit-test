@@ -1,73 +1,59 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Technical Test Project - Habit-test
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This repository contains the source code for a project developed as part of the technical test for the company Habit-test. The project was built using Node.js, Nest.js, and TypeORM, providing an efficient and scalable solution for the proposed challenges.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Challenge Description
 
-## Description
+Build a RESTful JSON API using Python3/Flask or Node/Express to manage multiple applications and perform operations in 2 different levels of client hierarchy (admin, user).
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+#### Operations:
 
-## Installation
+###### An admin can:
+- Users: Create, Read, and Delete
+- Applications: Create and Read
+- Messages: Delete
+
+###### An user can:
+- Users (same application): Read (profile fields)
+- Users (itself): Delete
+- Messages: Post to each other user within the same application
+
+#### Constraints:
+- Each endpoint must be authenticated by the user (in the application context) or admin (in the general context)
+- Each application is a new context, so one user will not see other user information or messages, only their own
+- Each user belongs to one application; one application user should not be able to see other application’s users.
+
+## Technologies Used
+
+- Node.js
+- Nest.js
+- TypeORM
+
+## API Documentation
+
+The API documentation is available via Swagger and can be accessed at the following address: [https://localhost:3000/api_doc](https://localhost:3000/api_doc).
+
+## Postman Documentation
+
+The API documentation and basic API test are available via Postman and can be accessed [here](https://api.postman.com/collections/2882740-a4992b7c-4601-4ded-a55d-341a375d9c4e?access_key=PMAT-01HQ0DPX0NJSRX1A51ACG34EVA) or by file **habit-test.postman_collection** in the root project folder.
+
+## API Authentication
+
+All passwords are sent to the backend in encrypted form to prevent the request from being intercepted. For testing, you can use the website [devtoolcafe.com](https://devtoolcafe.com/tools/aes) with the settings below to obtain an encrypted password:
+
+**Mode:** CBC
+
+**Padding:** Pkcs7
+
+**Key:** hjhoidw7on5b89ag
+
+## Dockerization
+
+The project is dockerized to facilitate execution in different environments. Use the following commands to build the Docker image and run the container:
 
 ```bash
-$ yarn install
-```
+# Build the Docker image
+npm run docker:build
 
-## Running the app
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+# Run the Docker container
+npm run docker:run

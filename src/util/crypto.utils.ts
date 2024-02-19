@@ -38,8 +38,4 @@ export class cryptoUtils {
     const passwordDecrypto = this.decrypto(password);
     return this.hash(passwordDecrypto);
   }
-
-  public static createMD5(text: string) {
-    return CryptoJS.MD5(text).toString();
-  }
 }

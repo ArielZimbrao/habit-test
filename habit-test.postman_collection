@@ -1,0 +1,889 @@
+{
+	"info": {
+		"_postman_id": "a4992b7c-4601-4ded-a55d-341a375d9c4e",
+		"name": "Habit-Test (ArielZimbrao)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2882740"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Signin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.userId).to.exist;",
+									"    pm.expect(responseData.accessToken).to.exist;",
+									"    pm.expect(responseData.expiresIn).to.exist;",
+									"    pm.expect(responseData.role).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"AccessToken is in a valid format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.accessToken).to.be.a('string');",
+									"    pm.expect(responseData.accessToken).to.match(/[A-Za-z0-9]+/);",
+									"    pm.environment.set(\"accessToken\", responseData.accessToken);",
+									"});",
+									"",
+									"",
+									"pm.test(\"ExpiresIn is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.expiresIn).to.be.a('number');",
+									"    pm.expect(responseData.expiresIn).to.be.at.least(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Role is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.role).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Role should be a non-empty string\");",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user@user2.pt\",\r\n    \"password\": \"TM1T9EEQvrk/gYhT2+ENyQ==\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/auth/signin",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"auth",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 201\", function () {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Email is in a valid email format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.email).to.be.a('string').and.to.match(/^.+@.+\\..+$/);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Password should not be empty\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.password).to.exist.and.to.not.be.empty;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"user\",\r\n    \"email\": \"user@user2.pt\",\r\n    \"password\": \"TM1T9EEQvrk/gYhT2+ENyQ==\",\r\n    \"role\": \"USER\",\r\n    \"applicationId\": \"4a5e71f2-f813-4dd5-9012-229126498714\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/users",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/users?numPerPage=10&currentPage=1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"users"
+							],
+							"query": [
+								{
+									"key": "numPerPage",
+									"value": "10"
+								},
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "name",
+									"value": "user",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "user@user",
+									"disabled": true
+								},
+								{
+									"key": "applicationId",
+									"value": "21c61b9b-7bc7-47a4-8f71-cb5fa16a138b",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/users/21c61b9b-7bc7-47a4-8f71-cb5fa16a138b",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"users",
+								"21c61b9b-7bc7-47a4-8f71-cb5fa16a138b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"Response is null\", function () {",
+									"    const responseData = xml2Json(pm.response.text());",
+									"    ",
+									"    pm.expect(responseData).to.be.null;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify user with ID is deleted\", function () {",
+									"    const responseData = xml2Json(pm.response.text());",
+									"    ",
+									"    pm.expect(responseData).to.be.null;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate that the response body is empty\", function () {",
+									"    const responseData = xml2Json(pm.response.text());",
+									"    ",
+									"    pm.expect(responseData).to.be.null;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/users/a2db1212-cc46-4ec4-bf81-e1448eeff701",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"users",
+								"a2db1212-cc46-4ec4-bf81-e1448eeff701"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Application",
+			"item": [
+				{
+					"name": "Create Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 201\", function () {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('name');",
+									"    pm.expect(responseData).to.have.property('active');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('actived');",
+									"    pm.expect(responseData).to.have.property('created_at');",
+									"    pm.expect(responseData).to.have.property('updated_at');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Name is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Active and actived are boolean values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.active).to.be.a('boolean');",
+									"    pm.expect(responseData.actived).to.be.a('boolean');",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"application 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/applications",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"applications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Application List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response Content-Type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Total, currentPage, and numPerPage fields are present in the response\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.total).to.exist;",
+									"    pm.expect(responseData.currentPage).to.exist;",
+									"    pm.expect(responseData.numPerPage).to.exist;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}applications?numPerPage=10&currentPage=1&name=application",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}applications"
+							],
+							"query": [
+								{
+									"key": "numPerPage",
+									"value": "10"
+								},
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "name",
+									"value": "application"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Application",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('name');",
+									"    pm.expect(responseData).to.have.property('actived');",
+									"    pm.expect(responseData).to.have.property('created_at');",
+									"    pm.expect(responseData).to.have.property('updated_at');",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Actived is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  pm.expect(responseData.actived).to.be.a('boolean');",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/applications/ebecebd1-cfe6-468e-b2ad-4020225eb24f",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"applications",
+								"ebecebd1-cfe6-468e-b2ad-4020225eb24f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Message",
+			"item": [
+				{
+					"name": "Create Message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Response status code is 201\", function () {\r",
+									"  pm.expect(pm.response.code).to.equal(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"User email is in a valid format\", function () {\r",
+									"  const responseData = pm.response.json();\r",
+									"  \r",
+									"  pm.expect(responseData.user).to.be.an('object');\r",
+									"  pm.expect(responseData.user.email).to.match(/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify that the application field is null or an object\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData).to.be.an('object');\r",
+									"    pm.expect(responseData.application).to.satisfy((value) => {\r",
+									"        return value === null || typeof value === 'object';\r",
+									"    }, 'The application field should be null or an object');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Role in the user object is a non-empty string\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseData.user).to.be.an('object');\r",
+									"    pm.expect(responseData.user.role).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Role should be a non-empty string\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Uma mensagem simples\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/messages",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Message List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response contains the 'data' array\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.have.property('data').that.is.an('array');",
+									"});",
+									"",
+									"",
+									"pm.test(\"All data objects have required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.data).to.be.an('array').that.is.not.empty;",
+									"",
+									"    responseData.data.forEach(function(item) {",
+									"        pm.expect(item).to.include.all.keys('id', 'text', 'actived', 'created_at', 'updated_at');",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/messages?numPerPage=10&currentPage=1",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "numPerPage",
+									"value": "10"
+								},
+								{
+									"key": "currentPage",
+									"value": "1"
+								},
+								{
+									"key": "userId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "applicationId",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('text');",
+									"    pm.expect(responseData).to.have.property('actived');",
+									"    pm.expect(responseData).to.have.property('created_at');",
+									"    pm.expect(responseData).to.have.property('updated_at');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Actived field should be a boolean value\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.actived).to.be.a('boolean');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/messages/bb20b582-6657-4dcf-bab0-523b21e581ed",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"messages",
+								"bb20b582-6657-4dcf-bab0-523b21e581ed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Message",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body should be null\", function () {",
+									"    const responseData = xml2Json(pm.response.text());",
+									"    ",
+									"    pm.expect(responseData).to.be.null;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that the message with ID is deleted from the system\", function () {",
+									"    const responseData = xml2Json(pm.response.text());",
+									"    ",
+									"    pm.expect(responseData).to.be.null;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Ensure the response does not contain any sensitive information\", function () {",
+									"    const responseData = xml2Json(pm.response.text());",
+									"    ",
+									"    pm.expect(responseData).to.be.null;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/api/{{apiVersion}}/messages/bb20b582-6657-4dcf-bab0-523b21e581ed",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"api",
+								"{{apiVersion}}",
+								"messages",
+								"bb20b582-6657-4dcf-bab0-523b21e581ed"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

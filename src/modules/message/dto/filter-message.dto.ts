@@ -1,7 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { PaginationDTO } from 'src/util/pagination.dto';
 
+@ApiExtraModels(PaginationDTO)
 export class FilterMessageDto extends PaginationDTO {
   @ApiProperty({ description: 'filter message by application' })
   @IsNotEmpty()

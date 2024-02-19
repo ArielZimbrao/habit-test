@@ -18,7 +18,6 @@ import PageData from 'src/util/pagination.type';
 import { MessageEntity } from 'src/configuration/database/entities/message.entity';
 import { RoleInterceptor } from 'src/configuration/roles.interceptor';
 import { RoleUserEnum } from 'src/util/enum/role.enum';
-import { Context } from 'src/configuration/context/context';
 
 @ApiTags('messages')
 @UseGuards(JwtAuthGuard)

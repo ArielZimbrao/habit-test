@@ -2,19 +2,18 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { initializeTransactionalContext } from 'typeorm-transactional-cls-hooked';
 import { json } from 'express';
 import { HttpExceptionFilter } from './exception/http-exception.filter';
 import { AuthService } from './modules/auth/auth.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
+  const apiVersion = process.env.API_VERSION || 'v1';
+  app.setGlobalPrefix(`api/${apiVersion}`);
   app.use(json({ limit: '50mb' }));
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new HttpExceptionFilter());
-  initializeTransactionalContext();
 
   const options = new DocumentBuilder()
     .setTitle('habit API')
